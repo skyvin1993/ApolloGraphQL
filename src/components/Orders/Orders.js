@@ -15,21 +15,24 @@ export default class Orders extends Component{
         }
     }
 
+    async onFavor({ doMutation, orderID, key, event }) {
+        event.preventDefault();
+        await doMutation({ variables: { orderID } });
+        let newOrders = [...this.state.orders];
+        newOrders[key] = {
+            ...newOrders[key],
+            favorite: !newOrders[key].favorite
+        }
+        this.setState({ orders: newOrders })    
+    }
+
     renderAddFavor({orderID, key}) {
         return (
             <Mutation mutation={ADD_FAVOR}>
                 {(addFavor) => (
-                    <a href="#" className="" onClick={ async event => {
-                        event.preventDefault();
-                        const res = await addFavor({ variables: { orderID } });
-                        let newOrders = [...this.state.orders];
-                        newOrders[key] = {
-                            ...newOrders[key],
-                            favorite: true
-                        }
-                        this.setState({ orders: newOrders })
-
-                    } } >В избранное</a>            
+                    <button className="btn btn-link mb-0" onClick={ event => {
+                         this.onFavor({ event, orderID, key, doMutation:addFavor }) 
+                    }} >В избранное</button>            
                 )}
             </Mutation>
         )
@@ -39,17 +42,9 @@ export default class Orders extends Component{
         return (
             <Mutation mutation={REMOVE_FAVOR}>
                 {(removeFavor) => (
-                    <span className="favourite-icon" onClick={ async event => {
-                            event.preventDefault();
-                            const res = await removeFavor({ variables: { orderID } });
-                            let newOrders = [...this.state.orders];
-                            newOrders[key] = {
-                                ...newOrders[key],
-                                favorite: false
-                            }
-                            this.setState({ orders: newOrders })
-                        } 
-                    } ><FontAwesomeIcon icon={['fa', 'star']} /></span>
+                    <span className="favourite-icon" onClick={ event => {
+                        this.onFavor({ event, orderID, key, doMutation:removeFavor })
+                    }} ><FontAwesomeIcon icon={['fa', 'star']} /></span>
                 )}
             </Mutation>
         )
@@ -68,7 +63,7 @@ export default class Orders extends Component{
                             ? this.renderFavorIcon({ orderID: order.id, key })
                             : null
                         }
-                        #{order.id}
+                        <span className="ml-2" >#{order.id}</span>
                     </p>
                     {
                             !order.favorite
@@ -76,7 +71,7 @@ export default class Orders extends Component{
                             : null
                     }
                     <div
-                      className="status"
+                      className="status mt-2"
                       style={{ backgroundColor: order.status_color }}
                     >
                       {order.status}
@@ -105,7 +100,9 @@ export default class Orders extends Component{
                   >
                     <div className="card card-body">
                       <div className="customer-info">
-                        <div className="customer-info__ava-block"><img className="customer-info__ava-img" src={order.customer.small_avatar}></img></div>
+                        <div className="customer-info__ava-block">
+                            <img className="customer-info__ava-img" alt="ava" src={order.customer.small_avatar}></img>
+                        </div>
                         <div className="customer-info__text ml-3">
                             <p>#{order.customer.id}</p>
                             <h6 className="mb-0">{order.customer.login}</h6>

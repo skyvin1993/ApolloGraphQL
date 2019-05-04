@@ -15,7 +15,7 @@ const AuthInfo = props => (
                     <div className="ava-cont">
                         <div className="row">
                             <div className="col-4">
-                                <div className="ava"><img className="ava_img" src={authData.small_avatar} /></div>
+                                <div className="ava"><img className="ava_img" alt="ava" src={authData.small_avatar} /></div>
                             </div>
                             <div className="col-8 align-self-center">
                                 <div>Login: {authData.login}</div>                    
