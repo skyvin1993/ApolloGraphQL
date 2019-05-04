@@ -1,0 +1,55 @@
+.ava{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    &_img{
+        max-width: 100%;    
+    }
+}
+
+.ava-cont{
+    position: fixed;
+    padding-top: 30px;
+}
+
+.Orders{
+    margin-top: 30px;
+    
+
+    & p{
+        margin-bottom: 0;
+    }
+
+    .status{
+        color: #ffffff;
+    }
+  }
+
+
+.customer-info{
+    display: flex;
+    align-items: center;
+
+    &__ava-block{
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+    }
+
+    &__ava-img{
+        max-width: 100%;
+    }
+
+    &__date{
+        font-size: 14px;
+    }
+}  
+
+.WorkPage{
+    max-width: 840px;
+    width: auto;
+}
