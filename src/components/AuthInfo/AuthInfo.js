@@ -2,6 +2,9 @@ import React from 'react';
 import { AUTH_INFO } from '../../Queries';
 import { Query } from 'react-apollo';
 
+/**
+ * AuthInfo - компонент загрузки и рендера данных авторизации 
+ */
 const AuthInfo = props => (
     <Query query={ AUTH_INFO } >
         {({ loading, error, data }) => {

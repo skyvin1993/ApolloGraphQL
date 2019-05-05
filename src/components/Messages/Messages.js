@@ -4,6 +4,9 @@ import { GET_MESSAGES } from '../../Queries';
 import Message from '../Message/Message';
 import './styles/Styles.scss';
 
+/**
+ * Messages - компонент загрузки и рендера сообщений
+ */
 export default class Messages extends Component{
   constructor(props) {
       super(props);
@@ -15,11 +18,17 @@ export default class Messages extends Component{
       }
   }  
 
+  /**
+   * Метод отображения следующей подгруженной страницы
+   */
   loadMore() {
       const newPage = this.state.currentPage + 1 
       this.setState({ currentPage: newPage })
   }
 
+  /**
+   * Метод загрузки и рендера сообщений 
+   */
   renderQueries() {
     const messages = [];
     for (let i = 1; i <= this.state.currentPage; ++i) {
@@ -43,6 +52,9 @@ export default class Messages extends Component{
     return messages;
   }
 
+  /**
+   * Метод рендера кнопки "Load more"
+   */
   renderLoadMore() {
     return (
       <Query query={GET_MESSAGES} variables={{ page: this.state.currentPage + 1 }}>

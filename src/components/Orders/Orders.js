@@ -5,6 +5,10 @@ import { ORDERS } from '../../Queries';
 import { ADD_FAVOR, REMOVE_FAVOR } from '../../Mutations';
 import { FontAwesomeIcon  } from '@fortawesome/react-fontawesome';
 
+/**
+ * Orders - компонент загрузки и рендера заказов.
+ * По-умолчанию грузит завершенные заказы (category === "complete")
+ */
 export default class Orders extends Component{
     constructor(props){
         super(props);
@@ -15,6 +19,13 @@ export default class Orders extends Component{
         }
     }
 
+    /**
+     * Асинхронный метод инициирующий мутацию при добавлении или удалении из избранного 
+     * @param {function} doMutation асинхронная функция запускающая мутацию
+     * @param {number} orderID ID заказа для идентификации при выполнении мутации
+     * @param {number} key Индекс заказа в this.state.orders массиве
+     * @param {object} event Объект события, инициирущего вызов метода  
+     */
     async onFavor({ doMutation, orderID, key, event }) {
         event.preventDefault();
         await doMutation({ variables: { orderID } });
@@ -26,30 +37,43 @@ export default class Orders extends Component{
         this.setState({ orders: newOrders })    
     }
 
+    /**
+     * Метод рендера кнопки добавления в избранное
+     * @param {number} orderID ID заказа для идентификации при выполнении мутации
+     * @param {number} key Индекс заказа в this.state.orders массиве
+     */
     renderAddFavor({orderID, key}) {
         return (
             <Mutation mutation={ADD_FAVOR}>
-                {(addFavor) => (
+                {doMutation => (
                     <button className="btn btn-link mb-0" onClick={ event => {
-                         this.onFavor({ event, orderID, key, doMutation:addFavor }) 
+                         this.onFavor({ event, orderID, key, doMutation }) 
                     }} >В избранное</button>            
                 )}
             </Mutation>
         )
     }
 
+    /**
+     * Метод рендера иконки избранного. По клику осуществляет удаление заказа из избранного
+     * @param {number} orderID ID заказа для идентификации при выполнении мутации
+     * @param {number} key Индекс заказа в this.state.orders массиве
+     */
     renderFavorIcon({ orderID, key }) {
         return (
             <Mutation mutation={REMOVE_FAVOR}>
-                {(removeFavor) => (
+                {doMutation => (
                     <span className="favourite-icon" onClick={ event => {
-                        this.onFavor({ event, orderID, key, doMutation:removeFavor })
+                        this.onFavor({ event, orderID, key, doMutation })
                     }} ><FontAwesomeIcon icon={['fa', 'star']} /></span>
                 )}
             </Mutation>
         )
     }
 
+    /**
+     * Метод рендера заказов
+     */
     renderOrders() {
         return (
           <ul className="list-group">
@@ -156,5 +180,11 @@ Orders.defaultProps = {
 }
 
 Orders.propTypes = {
-    category: PropTypes.string
+    category: PropTypes.string // категория заказа (
+      // active - Активные,
+      // prices - Предложенные цены,
+      // past - Прошедшие,
+      // execution - На выполнении,
+      // complete - Готовые,
+      // favorit - Избранные)
 }
